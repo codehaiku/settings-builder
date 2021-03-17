@@ -9,6 +9,8 @@ use SettingsBuilder\Interfaces;
 class Dispatch {
 
     protected $menu;
+
+    protected $menu_hook;
     
     public function __construct( Menu $menu ) {
         $this->menu = $menu;
@@ -31,20 +33,21 @@ class Dispatch {
     public function __invoke() {
 
         $props = $this->getProps();
-        
+
         $callback = function() { 
             echo 'Settings Page'; 
+            echo '<p>Object ID: ' . spl_object_id( $this ) . '</p>';
         };
 
-        add_menu_page(
-            $props['page_title'],
-            $props['menu_title'],
-            $props['capability'],
-            $props['menu_slug'],
-            $callback,
-            $props['icon'],
-            $props['position']
-        );
+        $this->menu_hook = add_menu_page(
+                $props['page_title'],
+                $props['menu_title'],
+                $props['capability'],
+                $props['menu_slug'],
+                $callback,
+                $props['icon'],
+                $props['position']
+            );
 
     }
 
